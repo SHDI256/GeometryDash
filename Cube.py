@@ -49,24 +49,20 @@ class Cube(pygame.sprite.Sprite):
         self.angle -= self.angular_speed
         self.c += 1
 
-    # TODO
-    # def is_collision(self, field):
-    #     if self.is_jump:
-    #         x1 = self.origin_x + self.radius * 2
-    #         y1 = self.origin_y + self.radius * 2
-    #         y2 = self.origin_y
-    #     else:
-    #         x1 = self.x + self.radius * 2
-    #         y1 = self.y + self.radius * 2
-    #         y2 = self.y
-    #     for i, barriers in enumerate(field.field):
-    #         for j, barrier in enumerate(barriers):
-    #             if barrier == 0:
-    #                 if ():
-    #                     return True
-    #             elif barrier == 1:
-    #                 if ():
-    #                     return True
+    def is_collision(self, field):
+        if self.is_jump:
+            x1 = self.origin_x + self.radius * 2
+            y1 = self.origin_y + self.radius * 2
+            y2 = self.origin_y
+        else:
+            x1 = self.x + self.radius * 2
+            y1 = self.y + self.radius * 2
+            y2 = self.y
+
+        for barriers in field.field:
+            for barrier in barriers:
+                if barrier != -1:
+                    return barrier.is_collision(self)
 
     def render(self, screen):
         if self.is_jump:
@@ -102,6 +98,7 @@ if __name__ == '__main__':
 
         screen.blit(background, (0, 0))
         if cube.is_jump:
+
             cube.jump(698)
 
         # barrier.move(10)

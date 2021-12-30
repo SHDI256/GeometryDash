@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from Cube import *
 from Surface import *
@@ -15,7 +17,7 @@ if __name__ == '__main__':
 
     cube = Cube(525, 698, 25, 0, 15, 250, 15, 'cube-3.png')
     surface = Surface(0, 773, 'Surface-1.jpg', 10)
-    field = Field([[0], [1], [1], [0, 0], [1], [1], [0, 0, 0], [1], [1], [1]], 1920, 698, 50, ['barrier-2.png', 'barrier-1.png'])
+    field = Field([[0], [1], [1], [0, 0], [1], [1], [0, 0, 0], [1], [1], [1]], 1920, 723, 50, ['barrier-2.png', 'barrier-1.png'])
 
     clock = pygame.time.Clock()
 
@@ -46,8 +48,8 @@ if __name__ == '__main__':
         surface.move(10)
         surface.render(screen)
         cube.render(screen)
-        # if cube.is_collision(field):
-        #      pygame.quit()
+        if cube.is_collision(field):
+            sys.exit()
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()

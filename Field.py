@@ -4,20 +4,31 @@ from Barrier import *
 
 class Field:
     def __init__(self, field, start_x, start_y, width, images):
-        self.field = field
         self.start_x = start_x
         self.start_y = start_y
         self.width = width
         self.images = [pygame.transform.scale(pygame.image.load(i), (width, width)) for i in images]
+        self.field = []
+        for i, c in enumerate(field):
+            tmp = []
+            for j, br in enumerate(c):
+                if br != -1:
+                    tmp.append(Barrier(start_x + i * width, start_y - j * width, 50, images[br], br))
+            self.field.append(tmp)
+        print(self.field)
+
 
     def move(self, speed):
-        self.start_x -= speed
+        for barriers in self.field:
+            for barrier in barriers:
+                if barrier != -1:
+                    barrier.start_x -= speed
 
     def render(self, screen):
         for i, barriers in enumerate(self.field):
             for j, barrier in enumerate(barriers):
                 if barrier != -1:
-                    screen.blit(self.images[barrier], (self.start_x + self.width * i, self.start_y - self.width * j))
+                    barrier.render(screen)
 
 
 if __name__ == '__main__':
