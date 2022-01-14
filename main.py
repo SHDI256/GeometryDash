@@ -40,7 +40,7 @@ if __name__ == '__main__':
             if hit.type == 1:
                 running = False
             else:
-                if cube.rect.y + cube.radius * 2 > hit.rect.y and cube.rect.x + cube.radius < hit.rect.x + hit.width:
+                if cube.rect.y >= hit.rect.y and cube.rect.y + cube.radius * 2 <= hit.rect.y + hit.rect.y + hit.width and cube.rect.x + cube.radius < hit.rect.x + hit.width:
                     running = False
         surface.move(12)
         surface.render(screen)
