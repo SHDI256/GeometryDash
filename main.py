@@ -31,10 +31,8 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if not cube.is_jump:
-                        cube.is_jump = True
+        if pygame.key.get_pressed()[pygame.K_SPACE]:
+            cube.is_jump = True
 
         screen.blit(background, (0, 0))
         hits = pygame.sprite.spritecollide(cube, barriers, False)
