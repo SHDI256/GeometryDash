@@ -15,8 +15,8 @@ if __name__ == '__main__':
     screen.blit(background, (0, 0))
 
     surface = Surface(0, 773, 'Surface-1.jpg', 10)
-    field = Field([[0], [0], [0], [0], [0], [0], [0], [0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0, 1], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0],   [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]], 1920, 723, 50, ['barrier-2.png', 'barrier-1.png'], 10)
-    cube = Cube(525, 723, 25, 50, 12, 'cube-3.png', field)
+    field = Field([[0], [0], [0], [0], [0], [0], [0], [0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0, 1], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0], [0], [0, 0, 0, 0], [0, 0, 0, 0], [0], [0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0], [0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], 1920, 723, 50, ['barrier-2.png', 'barrier-1.png'], 12)
+    cube = Cube(525, 723, 25, 50, 10, 'cube-3.png', field)
     clock = pygame.time.Clock()
 
     player = pygame.sprite.Group()
@@ -44,7 +44,7 @@ if __name__ == '__main__':
             else:
                 if cube.rect.y + cube.radius * 2 > hit.rect.y and cube.rect.x + cube.radius < hit.rect.x + hit.width:
                     running = False
-        surface.move(10)
+        surface.move(12)
         surface.render(screen)
         barriers.update()
         barriers.draw(screen)

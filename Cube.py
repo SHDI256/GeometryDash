@@ -20,7 +20,7 @@ class Cube(pygame.sprite.Sprite):
         self.field = field
 
     def update(self):
-        self.end_y = self.field.get_now_y(self.rect.x + self.radius   )
+        self.end_y = self.field.get_now_y(self.rect.x + self.radius)
         if self.field.get_now_y(self.rect.x - self.radius) < self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) and \
                 self.field.get_now_y(self.rect.x + self.radius) == self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) \
                 and not self.is_jump:
