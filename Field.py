@@ -3,32 +3,25 @@ from Barrier import *
 
 
 class Field:
-    def __init__(self, field, start_x, start_y, width, images):
+    def __init__(self, field, start_x, start_y, width, images, speed):
         self.start_x = start_x
         self.start_y = start_y
         self.width = width
         self.images = [pygame.transform.scale(pygame.image.load(i), (width, width)) for i in images]
         self.field = []
+        self.speed = speed
         for i, c in enumerate(field):
             tmp = []
             for j, br in enumerate(c):
                 if br != -1:
-                    tmp.append(Barrier(start_x + i * width, start_y - j * width, 50, images[br], br))
+                    tmp.append(Barrier(start_x + i * width, start_y - j * width, 50, images[br], br, self.speed))
             self.field.append(tmp)
-        print(self.field)
 
-
-    def move(self, speed):
-        for barriers in self.field:
-            for barrier in barriers:
-                if barrier != -1:
-                    barrier.start_x -= speed
-
-    def render(self, screen):
-        for i, barriers in enumerate(self.field):
-            for j, barrier in enumerate(barriers):
-                if barrier != -1:
-                    barrier.render(screen)
+    def get_now_y(self, x):
+        if (x - self.field[0][0].rect.x) // 50 < 0 or (x - self.field[0][0].rect.x) // 50 > len(self.field) - 1:
+            return 723
+        else:
+            return -(len(self.field[(x - self.field[0][0].rect.x) // 50]) * 50) + 723
 
 
 if __name__ == '__main__':

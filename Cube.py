@@ -2,74 +2,47 @@ import pygame
 
 
 class Cube(pygame.sprite.Sprite):
-    def __init__(self, x, y, radius, angle, angular_speed, speed, acceleration, image):
+    def __init__(self, x, y, radius, speed, acceleration, image, field):
+        pygame.sprite.Sprite.__init__(self)
         image = pygame.transform.scale(pygame.image.load(image), (radius * 2, radius * 2))
-        self.x = x
-        self.y = y
-        self.origin_x = x
-        self.origin_y = y
         self.radius = radius
-        self.angle = angle
-        self.angular_speed = angular_speed
         self.speed_start = speed
         self.speed = speed
         self.acceleration = acceleration
         self.image = image
-        self.rotated_image = image
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         self.is_jump = False
+        self.jump_orientation = True
         self.c = 0
+        self.end_y = self.rect.y
+        self.field = field
 
-    def jump(self, end_y):
-        if self.origin_y >= end_y and self.speed < 0:
-            self.angle = 0
-            self.origin_y = end_y
-            self.y = end_y
-            self.speed = self.speed_start
-            self.is_jump = False
-            self.c = 0
+    def update(self):
+        self.end_y = self.field.get_now_y(self.rect.x + self.radius * 2)
+        if self.field.get_now_y(self.rect.x - self.radius) < self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) and \
+                self.field.get_now_y(self.rect.x + self.radius) == self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) \
+                and not self.is_jump:
+            self.is_jump = True
+            self.jump_orientation = False
 
-        w, h = self.image.get_size()
-        box = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
-        box_rotate = [p.rotate(self.angle) for p in box]
-        min_box = (min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
-        max_box = (max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
+        elif self.is_jump:
+            if self.jump_orientation:
+                self.rect.y -= (self.speed * (1 / 15) * self.c) + ((self.acceleration * self.c) / 2)
+                self.speed -= self.acceleration
+            else:
+                self.rect.y += (self.speed * (1 / 15) * self.c) + ((self.acceleration * self.c) / 2)
+                self.speed += self.acceleration
+            self.c += 1
 
-        pivot = pygame.math.Vector2(w / 2, -(h / 2))
-        pivot_rotate = pivot.rotate(self.angle)
-        pivot_move = pivot_rotate - pivot
-
-        origin = (self.x + (w / 2) + min_box[0] - pivot_move[0],
-                  self.y + (h / 2) - max_box[1] + pivot_move[1])
-
-        self.rotated_image = pygame.transform.rotate(self.image, self.angle)
-        self.origin_x = origin[0]
-        self.origin_y = origin[1]
-        self.origin_y -= (self.speed * (1 / 15) * self.c) + ((self.acceleration * self.c) / 2)
-        self.speed -= self.acceleration
-        self.angle -= self.angular_speed
-        self.c += 1
-
-    def is_collision(self, field):
-        if self.is_jump:
-            x1 = self.origin_x + self.radius * 2
-            y1 = self.origin_y + self.radius * 2
-            y2 = self.origin_y
-        else:
-            x1 = self.x + self.radius * 2
-            y1 = self.y + self.radius * 2
-            y2 = self.y
-
-        for barriers in field.field:
-            for barrier in barriers:
-                if barrier != -1:
-                    return barrier.is_collision(self)
-
-    def render(self, screen):
-        if self.is_jump:
-            screen.blit(self.rotated_image, (self.origin_x, self.origin_y))
-        else:
-            screen.blit(self.image, (self.x + self.radius, self.y + self.radius))
-
+            if self.rect.y + self.radius * 2 >= self.end_y:
+                if (self.jump_orientation and self.speed < 0) or ((not self.jump_orientation) and self.speed > 0):
+                    self.rect.y = self.end_y
+                    self.speed = self.speed_start
+                    self.is_jump = False
+                    self.jump_orientation = True
+                    self.c = 0
 
 if __name__ == '__main__':
     pygame.init()

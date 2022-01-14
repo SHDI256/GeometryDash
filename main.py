@@ -15,11 +15,16 @@ if __name__ == '__main__':
     background = pygame.transform.scale(background, (1920, 1080))
     screen.blit(background, (0, 0))
 
-    cube = Cube(525, 698, 25, 0, 15, 250, 15, 'cube-3.png')
     surface = Surface(0, 773, 'Surface-1.jpg', 10)
-    field = Field([[0], [1], [1], [0, 0], [1], [1], [0, 0, 0], [1], [1], [1]], 1920, 723, 50, ['barrier-2.png', 'barrier-1.png'])
-
+    field = Field([[0], [0], [0], [0], [0], [0], [0], [0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], 1920, 723, 50, ['barrier-2.png', 'barrier-1.png'], 10)
+    cube = Cube(525, 723, 25, 50, 12, 'cube-3.png', field)
     clock = pygame.time.Clock()
+
+    player = pygame.sprite.Group()
+    player.add(cube)
+
+    barriers = pygame.sprite.Group()
+    [[barriers.add(j) for j in i] for i in field.field]
 
     running = True
     is_jump = False
@@ -34,22 +39,19 @@ if __name__ == '__main__':
                         cube.is_jump = True
 
         screen.blit(background, (0, 0))
-        if cube.is_jump:
-            cube.jump(698)
-
-        # barrier.move(10)
-        # barrier.render(screen)
-        # barrier1.move(10)
-        # barrier1.render(screen)
-        # barrier2.move(10)
-        # barrier2.render(screen)
-        field.move(10)
-        field.render(screen)
+        hits = pygame.sprite.spritecollide(cube, barriers, False)
+        for hit in hits:
+            if hit.type == 1:
+                running = False
+            else:
+                if cube.rect.y + cube.radius * 2 > hit.rect.y:
+                    running = False
         surface.move(10)
         surface.render(screen)
-        cube.render(screen)
-        if cube.is_collision(field):
-            sys.exit()
+        barriers.update()
+        barriers.draw(screen)
+        player.update()
+        player.draw(screen)
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
