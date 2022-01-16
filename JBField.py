@@ -1,8 +1,8 @@
 import pygame
-from Barrier import *
+from JumpBoost import *
 
 
-class Field:
+class JBField:
     def __init__(self, field, start_x, start_y, width, images, speed):
         self.start_x = start_x
         self.start_y = start_y
@@ -15,13 +15,7 @@ class Field:
             tmp = []
             for j, br in enumerate(c):
                 if br in (0, 1):
-                    tmp.append(Barrier(start_x + i * width, start_y - j * width, 50, images[br], br, self.speed))
+                    tmp.append(JumpBoost(start_x + i * width, start_y - j * width, 50, images[br], self.speed, br))
                 else:
                     tmp.append(-1)
             self.field.append(tmp)
-
-    def get_now_y(self, x):
-        if (x - self.field[0][-1].rect.x) // 50 < 0 or (x - self.field[0][-1].rect.x) // 50 > len(self.field) - 1:
-            return 723
-        else:
-            return -(len(self.field[(x - self.field[0][-1].rect.x) // 50]) * 50) + 723

@@ -20,7 +20,7 @@ class Cube(pygame.sprite.Sprite):
         self.field = field
 
     def update(self):
-        self.end_y = self.field.get_now_y(self.rect.x + self.radius)
+        self.end_y = self.field.get_now_y(self.rect.x + self.radius) + 1
         if self.field.get_now_y(self.rect.x - self.radius) < self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) and \
                 self.field.get_now_y(self.rect.x + self.radius) == self.field.get_now_y(self.rect.x + self.radius * 2 + self.field.speed) \
                 and not self.is_jump:
@@ -44,43 +44,5 @@ class Cube(pygame.sprite.Sprite):
                     self.jump_orientation = True
                     self.c = 0
 
-if __name__ == '__main__':
-    pygame.init()
-
-    screen = pygame.display.set_mode((1920, 1080))
-
-    background = pygame.image.load('background-1.jpg')
-    background = pygame.transform.scale(background, (1920, 1080))
-    screen.blit(background, (0, 0))
-
-    cube = Cube(525, 698, 25, 0, 15, 250, 15, 'cube-3.png')
-
-    clock = pygame.time.Clock()
-
-    running = True
-    is_jump = False
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if not cube.is_jump:
-                        cube.is_jump = True
-
-        screen.blit(background, (0, 0))
-        if cube.is_jump:
-
-            cube.jump(698)
-
-        # barrier.move(10)
-        # barrier.render(screen)
-        # barrier1.move(10)
-        # barrier1.render(screen)
-        # barrier2.move(10)
-        # barrier2.render(screen)
-        cube.render(screen)
-        pygame.display.flip()
-        clock.tick(60)
-    pygame.quit()
+    def crash(self):
+        self.image = pygame.transform.scale(self.image, (0, 0))
