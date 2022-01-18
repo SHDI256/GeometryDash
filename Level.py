@@ -44,7 +44,6 @@ class Level:
 
     def start(self):
         self.is_start = True
-        self.music.start()
 
     def update(self):
         if self.is_start:
