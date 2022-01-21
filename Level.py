@@ -26,6 +26,7 @@ class Level:
         self.barriers = pygame.sprite.Group()
         self.jb_group = pygame.sprite.Group()
         self.jumper_group = pygame.sprite.Group()
+        self.pause = False
 
         for i in self.field.field:
             for j in i:
@@ -47,9 +48,9 @@ class Level:
 
     def update(self):
         if self.is_start:
-            self.cube.rect.x += 50
+            self.cube.rect.x += 20
             hits = pygame.sprite.spritecollide(self.cube, self.jumper_group, False)
-            self.cube.rect.x -= 50
+            self.cube.rect.x -= 20
             if len(hits) != 0:
                 if hits[0].type == 0:
                     self.cube.speed = self.cube.speed_start * 1.5
